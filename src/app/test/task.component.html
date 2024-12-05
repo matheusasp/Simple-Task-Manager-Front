@@ -1,0 +1,76 @@
+<div>
+  <label for="ftask">New Task:</label>
+  <input [(ngModel)]="userInput" #value type="text" id="task">
+  <button (click)="newTask(value.value)">Add Task</button>
+</div>
+<br>
+
+<div cdkDropListGroup class="task-lists-container">
+  <div *ngIf="tasks$ | async as tasks" class="task-list" cdkDropList (cdkDropListDropped)="onTaskDropped($event, 'To Do')">
+    <label for="ftask">To Do:</label>
+    <ul>
+      <li *ngFor="let task of tasks | filterByStatus: 'To Do'; let i = index" 
+        cdkDrag [cdkDragData]="task" (click)="markTask(task, i)">
+        
+        <span>{{ task.task_name }}</span>
+
+        <button (click)="changeTask(task)" class="icon-button">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+        <button (click)="deleteTask(task)" class="icon-button">
+          <i class="fas fa-trash-alt"></i> Delete
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="tasks$ | async as tasks" class="task-list" cdkDropList (cdkDropListDropped)="onTaskDropped($event, 'Doing')">
+    <label for="ftask">Doing:</label>
+    <ul>
+      <li *ngFor="let task of tasks | filterByStatus: 'Doing'; let i = index" 
+        cdkDrag [cdkDragData]="task" (click)="markTask(task, i)">
+        
+        <span>{{ task.task_name }}</span>
+
+        <button (click)="changeTask(task)" class="icon-button">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+        <button (click)="deleteTask(task)" class="icon-button">
+          <i class="fas fa-trash-alt"></i> Delete
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="tasks$ | async as tasks" class="task-list" cdkDropList (cdkDropListDropped)="onTaskDropped($event, 'Done')">
+    <label for="ftask">Done:</label>
+    <ul>
+      <li *ngFor="let task of tasks | filterByStatus: 'Done'; let i = index" 
+        cdkDrag [cdkDragData]="task" (click)="markTask(task, i)">
+        
+        <span>{{ task.task_name }}</span>
+
+        <button (click)="changeTask(task)" class="icon-button">
+          <i class="fas fa-edit"></i> Edit
+        </button>
+        <button (click)="deleteTask(task)" class="icon-button">
+          <i class="fas fa-trash-alt"></i> Delete
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="isModalOpen" class="modal">
+    <div class="modal-content">
+      <h2>Edit Task</h2>
+      <label for="editTaskName">Task Name:</label>
+      <input type="text" [(ngModel)]="taskToEdit.task_name" id="editTaskName" />
+      <div class="modal-actions">
+        <button (click)="closeModal()">Cancel</button>
+        <button (click)="saveTask()">Save</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>
